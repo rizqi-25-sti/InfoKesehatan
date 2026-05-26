@@ -27,8 +27,13 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.Spa
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -48,7 +53,13 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             InfoKesehatanTheme {
-                HomeScreen ()
+                Scaffold(
+                    bottomBar = { BottomNavigation() }
+                )  {
+                    padding ->
+                    HomeScreen(modifier = Modifier.padding(padding))
+                }
+
             }
         }
     }
@@ -101,7 +112,7 @@ fun SearchBar(
             disabledContainerColor = MaterialTheme.colorScheme.surface,
         ), modifier = modifier
             .fillMaxWidth()
-            .heightIn(min = 56.dp)
+            .heightIn(min = 50.dp)
 
     )
 }
@@ -233,21 +244,77 @@ fun HomeSection (
 
 
 @Composable
-fun HomeScreen() {
-    Column(modifier = Modifier) {
-        SearchBar()
+fun HomeScreen(
+    modifier : Modifier = Modifier
+
+    ) {
+    Column (
+        modifier = Modifier.verticalScroll(rememberScrollState())) {
         Spacer(modifier = Modifier.height(16.dp))
-        AlignYourBodyElement(
-            drawable = R.drawable.ab1_inversions,
-            text = R.string.ab1_inversions
+        SearchBar(modifier = Modifier.padding(horizontal = 16.dp))
+        HomeSection(title = R.string.align_your_body) {
+            AlignYourBodyRow()
+        }
+        HomeSection(title = R.string.favorite_collections) {
+            FavoriteCollectionsGrid()
+        }
+        Spacer(modifier = Modifier.height(16.dp))
+    }
+
+}
+
+@Composable
+private fun BottomNavigation (modifier: Modifier = Modifier) {
+    NavigationBar (
+        containerColor = MaterialTheme.colorScheme.surfaceVariant,
+        modifier = Modifier
+    ) {
+
+        NavigationBarItem(
+            icon = {
+                Icon(
+                    imageVector = Icons.Default.Home,
+                    contentDescription = null)
+                   },
+
+            label = {
+                Text(
+                    stringResource(R.string.bottom_navigation_home))
+                    },
+            selected = true,
+            onClick = {}
         )
-        Spacer(modifier = Modifier.height(8.dp))
-        FavoriteCollectionCard(
-            drawable = R.drawable.fc2_nature_meditations,
-            text = R.string.fc2_nature_meditations
+
+        NavigationBarItem(
+            icon = {
+                Icon(
+                    imageVector = Icons.Default.AccountCircle,
+                    contentDescription = null)
+                   },
+            label = {
+                Text(
+                    stringResource(R.string.bottom_navigation_profile)) },
+            selected = false,
+            onClick = { }
         )
+
     }
 }
 
 
+
+//    Column(modifier = Modifier) {
+//        SearchBar()
+//        Spacer(modifier = Modifier.height(16.dp))
+//        AlignYourBodyElement(
+//            drawable = R.drawable.ab1_inversions,
+//            text = R.string.ab1_inversions
+//        )
+//        Spacer(modifier = Modifier.height(8.dp))
+//        FavoriteCollectionCard(
+//            drawable = R.drawable.fc2_nature_meditations,
+//            text = R.string.fc2_nature_meditations
+//        )
+//    }
+//}
 
