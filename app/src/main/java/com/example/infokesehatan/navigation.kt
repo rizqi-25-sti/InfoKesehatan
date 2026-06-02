@@ -1,7 +1,9 @@
-package com.example.infokesehatan
+package com.example.infokesehatans
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.*
+import com.example.infokesehatan.MyHealthApp
+import com.example.infokesehatan.ProfileScreen
 
 
 @Composable
