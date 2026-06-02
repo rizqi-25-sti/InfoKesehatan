@@ -8,8 +8,11 @@ lifecycleRuntimeKtx = "2.10.0"
 activityCompose = "1.13.0"
 kotlin = "2.2.10"
 composeBom = "2026.02.01"
-material3 = "1.1.0"
+material3 = "1.4.0"
 navigationCompose = "2.9.8"
+windowSizeClass = "1.1.0"
+adaptive = "1.0.0-alpha11"
+
 
 
 [libraries]
@@ -29,8 +32,8 @@ androidx-compose-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-te
 androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3" }
 androidx-material-icons-extended = { group = "androidx.compose.material", name = "material-icons-extended" }
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
-androidx-material3-window-size-class = { group = "androidx.compose.material3", name = "material3-window-size-class", version.ref = "material3" }
-
+androidx-window-size = { group = "androidx.compose.material3", name = "material3-window-size-class", version.ref = "windowSizeClass" }
+androidx-window-adaptive = { group = "androidx.compose.material3.adaptive", name = "material3-adaptive", version.ref = "adaptive" }
 
 
 [plugins]

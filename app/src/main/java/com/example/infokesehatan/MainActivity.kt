@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
@@ -35,6 +36,7 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Spa
 import androidx.compose.material3.*
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -42,7 +44,11 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Devices
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.infokesehatan.ui.theme.InfoKesehatanTheme
 
 
@@ -53,12 +59,14 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             InfoKesehatanTheme {
-                Scaffold(
-                    bottomBar = { BottomNavigation() }
-                )  {
-                    padding ->
-                    HomeScreen(modifier = Modifier.padding(padding))
-                }
+                MyHealthApp(navController = rememberNavController())
+            //   Scaffold(
+            //       bottomBar = { BottomNavigation() },
+                                                    //navController = rememberNavController()
+            //   )  {
+            //      padding ->
+            //      HomeScreen(modifier = Modifier.padding(padding))
+
 
             }
         }
@@ -264,10 +272,10 @@ fun HomeScreen(
 }
 
 @Composable
-private fun BottomNavigation (modifier: Modifier = Modifier) {
+fun BottomNavigation (navController: NavController) {
     NavigationBar (
-        containerColor = MaterialTheme.colorScheme.surfaceVariant,
-        modifier = Modifier
+        containerColor = MaterialTheme.colorScheme.surfaceVariant
+
     ) {
 
         NavigationBarItem(
@@ -282,7 +290,7 @@ private fun BottomNavigation (modifier: Modifier = Modifier) {
                     stringResource(R.string.bottom_navigation_home))
                     },
             selected = true,
-            onClick = {}
+            onClick = {navController.navigate("homescreen") }
         )
 
         NavigationBarItem(
@@ -295,7 +303,7 @@ private fun BottomNavigation (modifier: Modifier = Modifier) {
                 Text(
                     stringResource(R.string.bottom_navigation_profile)) },
             selected = false,
-            onClick = { }
+            onClick = {navController.navigate("profilescreen")  }
         )
 
     }
@@ -353,6 +361,51 @@ fun SampingNavigationRail(
      }
 }
 
+
+
+@Composable
+fun AppPreview(navController: NavController) {
+    InfoKesehatanTheme {
+        Scaffold(
+            bottomBar = { BottomNavigation(navController) }
+        ) { padding ->
+            HomeScreen(
+                modifier = Modifier.padding(padding))
+        }
+    }
+}
+
+
+//@Preview (
+//device = Devices.AUTOMOTIVE_1024p,
+//widthDp = 720,
+//heightDp = 360,
+//)
+
+
+@Composable
+fun AppLandscape(
+    navController: NavController
+) {
+    Row {
+        SampingNavigationRail(navController)
+        AppPreview(navController)
+    }
+}
+
+
+@Composable
+fun MyHealthApp (
+    navController: NavController
+) {
+    val windowSize = currentWindowAdaptiveInfo().windowSizeClass
+    when (windowSize.widthSizeClass) {
+        WindowWidthSizeClass.Compact -> {AppPreview(navController)}
+        WindowWidthSizeClass.Medium -> {AppPreview(navController)}
+        WindowWidthSizeClass.Expanded -> {AppLandscape(navController)}
+        else -> {AppPreview(navController)}
+    }
+}
 
 
 
