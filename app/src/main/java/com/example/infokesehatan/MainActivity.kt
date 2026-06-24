@@ -7,7 +7,6 @@ import androidx.activity.enableEdgeToEdge
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -33,24 +32,22 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material.icons.filled.Spa
 import androidx.compose.material3.*
-import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Devices
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.infokesehatan.ui.theme.InfoKesehatanTheme
-
 
 
 class MainActivity : ComponentActivity() {
@@ -60,14 +57,6 @@ class MainActivity : ComponentActivity() {
         setContent {
             InfoKesehatanTheme {
                 MyHealthApp(navController = rememberNavController())
-            //   Scaffold(
-            //       bottomBar = { BottomNavigation() },
-                                                    //navController = rememberNavController()
-            //   )  {
-            //      padding ->
-            //      HomeScreen(modifier = Modifier.padding(padding))
-            //    }
-
             }
         }
     }
@@ -75,8 +64,8 @@ class MainActivity : ComponentActivity() {
 
 
 private data class DrawableStringPair(
-    @DrawableRes val drawable: Int,
-    @StringRes val text: Int
+    @param:DrawableRes val drawable: Int,
+    @param:StringRes val text: Int
 )
 
 private val alignYourBodyData = listOf(
@@ -101,10 +90,12 @@ private val favoriteCollectionsData = listOf(
 
 @Composable
 fun SearchBar(
-    modifier: Modifier = Modifier ) {
+    modifier: Modifier = Modifier
+) {
+    var query by remember { mutableStateOf("") }
     TextField(
-        value = "",
-        onValueChange = {},
+        value = query,
+        onValueChange = { query = it },
         leadingIcon = {
             Icon(
                 imageVector = Icons.Default.Search,
@@ -118,36 +109,35 @@ fun SearchBar(
             focusedContainerColor = MaterialTheme.colorScheme.surface,
             unfocusedContainerColor = MaterialTheme.colorScheme.surface,
             disabledContainerColor = MaterialTheme.colorScheme.surface,
-        ), modifier = modifier
+        ),
+        modifier = modifier
             .fillMaxWidth()
             .heightIn(min = 50.dp)
-
     )
 }
 
 
 
 @Composable
-fun AlignYourBodyElement (
+fun AlignYourBodyElement(
     @DrawableRes drawable: Int,
     @StringRes text: Int,
     modifier: Modifier = Modifier
-    ) {
-    Column (
+) {
+    Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier
+        modifier = modifier
     ) {
-        Image (
-            painter = painterResource(drawable),
+        Image(
+            painter = painterResource(id = drawable),
             contentDescription = null,
             contentScale = ContentScale.Crop,
             modifier = Modifier
-                .size (88.dp)
-                .clip (CircleShape)
-
+                .size(88.dp)
+                .clip(CircleShape)
         )
-        Text ( //bisa tambah jarak
-            text = stringResource(text),
+        Text(
+            text = stringResource(id = text),
             style = MaterialTheme.typography.bodyMedium,
             modifier = Modifier.paddingFromBaseline(
                 top = 24.dp,
@@ -158,16 +148,17 @@ fun AlignYourBodyElement (
 }
 
 
+
 @Composable
-fun AlignYourBodyRow (
+fun AlignYourBodyRow(
     modifier: Modifier = Modifier
 ) {
-    LazyRow (
+    LazyRow(
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         contentPadding = PaddingValues(horizontal = 16.dp),
         modifier = modifier
     ) {
-        items (alignYourBodyData) { item ->
+        items(alignYourBodyData) { item ->
             AlignYourBodyElement(
                 drawable = item.drawable,
                 text = item.text
@@ -177,31 +168,31 @@ fun AlignYourBodyRow (
 }
 
 
+
 @Composable
 fun FavoriteCollectionCard(
-    @DrawableRes drawable : Int,
-    @StringRes text : Int,
+    @DrawableRes drawable: Int,
+    @StringRes text: Int,
     modifier: Modifier = Modifier
 ) {
-    Surface (
+    Surface(
         shape = MaterialTheme.shapes.medium,
         color = MaterialTheme.colorScheme.surfaceVariant,
-        modifier = Modifier
+        modifier = modifier
     ) {
-        Row (
+        Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.width(255.dp)
-        ){
-            Image (
-                painter = painterResource(drawable),
+        ) {
+            Image(
+                painter = painterResource(id = drawable),
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier.size(80.dp)
-
             )
-            Text (
-                text = stringResource(text),
-                style =  MaterialTheme.typography.titleMedium,
+            Text(
+                text = stringResource(id = text),
+                style = MaterialTheme.typography.titleMedium,
                 modifier = Modifier.padding(horizontal = 16.dp)
             )
         }
@@ -210,10 +201,10 @@ fun FavoriteCollectionCard(
 
 
 @Composable
-fun FavoriteCollectionsGrid (
+fun FavoriteCollectionsGrid(
     modifier: Modifier = Modifier
 ) {
-    LazyHorizontalGrid (
+    LazyHorizontalGrid(
         rows = GridCells.Fixed(2),
         horizontalArrangement = Arrangement.spacedBy(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp),
@@ -232,16 +223,17 @@ fun FavoriteCollectionsGrid (
 
 
 @Composable
-fun HomeSection (
+fun HomeSection(
     @StringRes title: Int,
     modifier: Modifier = Modifier,
     content: @Composable () -> Unit
 ) {
-    Column (modifier) {
-        Text (
-            text = stringResource(title),
+    Column(modifier) {
+        Text(
+            text = stringResource(id = title),
             style = MaterialTheme.typography.labelMedium,
-            modifier = Modifier.paddingFromBaseline(40.dp, 16.dp)
+            modifier = Modifier
+                .paddingFromBaseline(40.dp, 16.dp)
                 .padding(horizontal = 16.dp)
         )
         content()
@@ -250,14 +242,14 @@ fun HomeSection (
 
 
 
-
 @Composable
 fun HomeScreen(
-    modifier : Modifier = Modifier
+    modifier: Modifier = Modifier
 
+) {
+    Column(
+        modifier = modifier.verticalScroll(rememberScrollState())
     ) {
-    Column (
-        modifier = Modifier.verticalScroll(rememberScrollState())) {
         Spacer(modifier = Modifier.height(16.dp))
         SearchBar(modifier = Modifier.padding(horizontal = 16.dp))
         HomeSection(title = R.string.align_your_body) {
@@ -272,95 +264,68 @@ fun HomeScreen(
 }
 
 @Composable
-fun BottomNavigation (navController: NavController) {
-    NavigationBar (
+fun BottomNavigation(navController: NavController) {
+    NavigationBar(
         containerColor = MaterialTheme.colorScheme.surfaceVariant
-
     ) {
 
         NavigationBarItem(
             icon = {
                 Icon(
                     imageVector = Icons.Default.Home,
-                    contentDescription = null)
-                   },
-
-            label = {
-                Text(
-                    stringResource(R.string.bottom_navigation_home))
-                    },
+                    contentDescription = null
+                )
+            },
+            label = { Text(stringResource(R.string.bottom_navigation_home)) },
             selected = true,
-            onClick = {navController.navigate("homescreen") }
+            onClick = { navController.navigate("homescreen") }
         )
 
         NavigationBarItem(
             icon = {
                 Icon(
                     imageVector = Icons.Default.AccountCircle,
-                    contentDescription = null)
-                   },
-            label = {
-                Text(
-                    stringResource(R.string.bottom_navigation_profile)) },
+                    contentDescription = null
+                )
+            },
+            label = { Text(stringResource(R.string.bottom_navigation_profile)) },
             selected = false,
-            onClick = {navController.navigate("profilescreen")  }
+            onClick = { navController.navigate("profilescreen") }
         )
-
     }
 }
 
 
 @Composable
 fun SampingNavigationRail(
-    navController : NavController,
-    modifier : Modifier = Modifier
+    navController: NavController,
+    modifier: Modifier = Modifier
 ) {
-     NavigationRail(modifier = Modifier.padding(
-         start = 8.dp,
-         end = 8.dp,
-     ),
-         containerColor = MaterialTheme.colorScheme.background
-     ){
-         Column(
-             modifier = Modifier.fillMaxHeight(),
-             verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
-         ) {
-             NavigationRailItem(
-                 icon = {
-                     Icon(
-                         imageVector = Icons.Default.Home,
-                         contentDescription = null
-                     )
-                 },
-                 label = {
-                     Text(
-                         stringResource(R.string.bottom_navigation_home)
-                     )
-                 },
-                 selected = true,
-                 onClick = { navController.navigate("homescreen") }
-             )
-             Spacer(modifier = Modifier.height(8.dp))
-             NavigationRailItem(
-                 icon = {
-                     Icon(
-                         imageVector = Icons.Default.AccountCircle,
-                         contentDescription = null
-                     )
-                 },
-                 label = {
-                     Text(
-                         stringResource(R.string.bottom_navigation_profile)
-                     )
-                 },
-                 selected = false,
-                 onClick = { navController.navigate("profilescreen") }
-             )
-         }
-     }
+    NavigationRail(
+        modifier = modifier.padding(start = 8.dp, end = 8.dp),
+        containerColor = MaterialTheme.colorScheme.background
+    ) {
+        Column(
+            modifier = Modifier.fillMaxHeight(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            NavigationRailItem(
+                icon = { Icon(imageVector = Icons.Default.Home, contentDescription = null) },
+                label = { Text(stringResource(R.string.bottom_navigation_home)) },
+                selected = true,
+                onClick = { navController.navigate("homescreen") }
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            NavigationRailItem(
+                icon = { Icon(imageVector = Icons.Default.AccountCircle, contentDescription = null) },
+                label = { Text(stringResource(R.string.bottom_navigation_profile)) },
+                selected = false,
+                onClick = { navController.navigate("profilescreen") }
+            )
+        }
+    }
 }
-
 
 
 @Composable
@@ -370,17 +335,11 @@ fun AppPreview(navController: NavController) {
             bottomBar = { BottomNavigation(navController) }
         ) { padding ->
             HomeScreen(
-                modifier = Modifier.padding(padding))
+                modifier = Modifier.padding(padding)
+            )
         }
     }
 }
-
-
-//@Preview (
-//device = Devices.AUTOMOTIVE_1024p,
-//widthDp = 720,
-//heightDp = 360,
-//)
 
 
 @Composable
@@ -395,33 +354,11 @@ fun AppLandscape(
 
 
 @Composable
-fun MyHealthApp (
+fun MyHealthApp(
     navController: NavController
 ) {
-    val windowSize = currentWindowAdaptiveInfo().windowSizeClass
-    when (windowSize.widthSizeClass) {
-        WindowWidthSizeClass.Compact -> {AppPreview(navController)}
-        WindowWidthSizeClass.Medium -> {AppPreview(navController)}
-        WindowWidthSizeClass.Expanded -> {AppLandscape(navController)}
-        else -> {AppPreview(navController)}
-    }
+    // Window size APIs require a specific Material3 window-size-class dependency and
+    // may not be available in all setups. For now choose a single layout path.
+    AppPreview(navController)
 }
-
-
-
-
-//    Column(modifier = Modifier) {
-//        SearchBar()
-//        Spacer(modifier = Modifier.height(16.dp))
-//        AlignYourBodyElement(
-//            drawable = R.drawable.ab1_inversions,
-//            text = R.string.ab1_inversions
-//        )
-//        Spacer(modifier = Modifier.height(8.dp))
-//        FavoriteCollectionCard(
-//            drawable = R.drawable.fc2_nature_meditations,
-//            text = R.string.fc2_nature_meditations
-//        )
-//    }
-//}
 

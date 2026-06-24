@@ -8,7 +8,7 @@ import com.example.infokesehatan.ProfileScreen
 
 @Composable
 fun Navigation() {
-    // Implement your navigation logic here
+
     val navController = rememberNavController()
     NavHost (
         navController = navController,
