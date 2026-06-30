@@ -49,7 +49,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.infokesehatan.ui.theme.InfoKesehatanTheme
 
-
+//commited 30 june 26
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
