@@ -44,6 +44,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
@@ -362,3 +363,22 @@ fun MyHealthApp(
     AppPreview(navController)
 }
 
+@Preview(showBackground = true, backgroundColor = 0xFFF5F0EE)
+@Composable
+fun HomeScreenPreview() {
+    InfoKesehatanTheme {
+        HomeScreen()
+
+    }
+}
+
+//@Preview(showBackground = true)
+//@Composable
+//fun HomeScreenPreview() {
+//    HomeScreen(
+//        onOthersMenuClick = {},
+//        onActivityMenuClick = {},
+//        onScheduleMenuClick = {},
+//        onCalendarMenuClick = {}
+//    )
+//}
