@@ -47,7 +47,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
+import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.infokesehatan.ui.theme.InfoKesehatanTheme
 
 //commited 30 june 26
@@ -57,7 +57,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             InfoKesehatanTheme {
-                MyHealthApp(navController = rememberNavController())
+                Navigation()
             }
         }
     }
@@ -266,6 +266,9 @@ fun HomeScreen(
 
 @Composable
 fun BottomNavigation(navController: NavController) {
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = navBackStackEntry?.destination?.route
+
     NavigationBar(
         containerColor = MaterialTheme.colorScheme.surfaceVariant
     ) {
@@ -278,8 +281,14 @@ fun BottomNavigation(navController: NavController) {
                 )
             },
             label = { Text(stringResource(R.string.bottom_navigation_home)) },
-            selected = true,
-            onClick = { navController.navigate("homescreen") }
+            selected = currentRoute == "homescreen",
+            onClick = {
+                if (currentRoute != "homescreen") {
+                    navController.navigate("homescreen") {
+                        popUpTo("homescreen") { inclusive = true }
+                    }
+                }
+            }
         )
 
         NavigationBarItem(
@@ -290,8 +299,12 @@ fun BottomNavigation(navController: NavController) {
                 )
             },
             label = { Text(stringResource(R.string.bottom_navigation_profile)) },
-            selected = false,
-            onClick = { navController.navigate("profilescreen") }
+            selected = currentRoute == "profilescreen",
+            onClick = {
+                if (currentRoute != "profilescreen") {
+                    navController.navigate("profilescreen")
+                }
+            }
         )
     }
 }
@@ -302,6 +315,9 @@ fun SampingNavigationRail(
     navController: NavController,
     modifier: Modifier = Modifier
 ) {
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = navBackStackEntry?.destination?.route
+
     NavigationRail(
         modifier = modifier.padding(start = 8.dp, end = 8.dp),
         containerColor = MaterialTheme.colorScheme.background
@@ -314,15 +330,25 @@ fun SampingNavigationRail(
             NavigationRailItem(
                 icon = { Icon(imageVector = Icons.Default.Home, contentDescription = null) },
                 label = { Text(stringResource(R.string.bottom_navigation_home)) },
-                selected = true,
-                onClick = { navController.navigate("homescreen") }
+                selected = currentRoute == "homescreen",
+                onClick = {
+                    if (currentRoute != "homescreen") {
+                        navController.navigate("homescreen") {
+                            popUpTo("homescreen") { inclusive = true }
+                        }
+                    }
+                }
             )
             Spacer(modifier = Modifier.height(8.dp))
             NavigationRailItem(
                 icon = { Icon(imageVector = Icons.Default.AccountCircle, contentDescription = null) },
                 label = { Text(stringResource(R.string.bottom_navigation_profile)) },
-                selected = false,
-                onClick = { navController.navigate("profilescreen") }
+                selected = currentRoute == "profilescreen",
+                onClick = {
+                    if (currentRoute != "profilescreen") {
+                        navController.navigate("profilescreen")
+                    }
+                }
             )
         }
     }

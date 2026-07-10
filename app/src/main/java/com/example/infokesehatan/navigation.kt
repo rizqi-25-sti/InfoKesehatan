@@ -1,23 +1,20 @@
-package com.example.infokesehatans
+package com.example.infokesehatan
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.*
-import com.example.infokesehatan.MyHealthApp
-import com.example.infokesehatan.ProfileScreen
-
 
 @Composable
 fun Navigation() {
-
     val navController = rememberNavController()
-    NavHost (
+    NavHost(
         navController = navController,
         startDestination = "homescreen"
     ) {
-        composable("homescreen") { MyHealthApp(navController) }
-        composable("profilescreen") { ProfileScreen(navController) }
-        // Add more destinations as needed
+        composable("homescreen") { 
+            MyHealthApp(navController) 
+        }
+        composable("profilescreen") { 
+            ProfileScreen(navController) 
+        }
     }
-
-    // You can use libraries like Jetpack Navigation Compose for handling navigation
 }
